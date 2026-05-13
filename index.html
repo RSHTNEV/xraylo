@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xraylo — Scan your brand like an X-ray</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+<style>
+/* ── TOKENS ────────────────────────────────────────────────────── */
+:root {
+  --bg-base:       #1B3331;
+  --bg-deep:       #152928;
+  --bg-surface:    #233F3C;
+  --bg-elevated:   #2C5250;
+  --accent:        #4DFFC4;
+  --accent-hover:  #7DFFDA;
+  --accent-pressed:#2EAF8A;
+  --accent-subtle: #1B4A41;
+  --accent-border: rgba(77,255,196,0.15);
+  --accent-border-h:rgba(77,255,196,0.40);
+  --text-primary:  #FFFFFF;
+  --text-secondary:#8AADA8;
+  --text-muted:    #6A9A96;
+  --text-accent:   #4DFFC4;
+  --text-on-accent:#152928;
+  --border-default:rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.14);
+  --status-danger: #FF6B6B;
+  --status-warning:#FFBE4D;
+  --font-sans:     'Space Grotesk', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+  --radius-xs: 4px; --radius-sm: 6px; --radius-md: 8px; --radius-lg:12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  font-size: 16px; line-height: 1.6;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+  overflow-x: hidden;
+}
+
+/* dot grid removed */
+body::before { display: none; }
+
+/* ── LAYOUT ───────────────────────────────────────────────────── */
+.container { max-width: 1440px; margin: 0 auto; padding: 0 64px; position: relative; }
+section { position: relative; }
+
+/* ── NAV ──────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(27,51,49,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-default);
+}
+.nav-inner {
+  display: flex; align-items: center; gap: 24px;
+  height: 60px;
+}
+.nav-logo img { height: 36px; display: block; }
+.nav-badge {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted);
+  display: inline-flex; align-items: center; gap: 6px; line-height: 1;
+}
+.dot-sm, .dot-md {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background-repeat: no-repeat;
+  background-size: 6px 6px;
+  background-position: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Crect width='6' height='6' rx='1' fill='%234DFFC4'/%3E%3C/svg%3E");
+  box-shadow: none;
+  flex-shrink: 0;
+}
+.nav-spacer { flex: 1; }
+.nav-link {
+  font-size: 14px; color: var(--text-secondary); text-decoration: none;
+  transition: color 150ms;
+}
+.nav-link:hover { color: var(--text-primary); }
+.btn-nav {
+  background: var(--accent); color: var(--text-on-accent);
+  font-family: var(--font-sans); font-size: 14px; font-weight: 600;
+  border: none; border-radius: var(--radius-sm); cursor: pointer;
+  padding: 8px 18px; transition: background 150ms, transform 120ms;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.btn-nav:hover { background: #fff; color: var(--bg-deep); }
+.btn-nav:active { transform: scale(0.98); background: var(--accent-pressed); }
+
+/* ── HERO ─────────────────────────────────────────────────────── */
+.hero {
+  padding: 100px 0 80px;
+  border-bottom: 1px solid var(--border-default);
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 420px; gap: 80px; align-items: center;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--text-accent); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-eyebrow::before {
+  content: ''; display: inline-block; width: 20px; height: 1px;
+  background: var(--accent); align-self: center;
+}
+.hero h1 {
+  font-size: clamp(40px, 5vw, 68px); font-weight: 700; line-height: 1.08;
+  letter-spacing: -0.03em; margin-bottom: 24px;
+  color: var(--text-primary);
+}
+.hero h1 em { color: var(--text-accent); font-style: normal; }
+.hero-sub {
+  font-size: 18px; color: var(--text-secondary); line-height: 1.6;
+  margin-bottom: 12px;
+}
+.hero-note {
+  font-size: 18px; color: var(--text-secondary);
+}
+
+/* ── SCAN FORM ────────────────────────────────────────────────── */
+.scan-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+}
+.scan-card-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-muted); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 6px; line-height: 1;
+}
+.scan-form { display: flex; flex-direction: column; gap: 12px; }
+.form-input {
+  background: var(--bg-deep); border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm); padding: 11px 14px;
+  font-family: var(--font-sans); font-size: 15px; color: var(--text-primary);
+  outline: none; width: 100%; transition: border-color 150ms;
+}
+.form-input::placeholder { color: var(--text-muted); }
+.form-input:focus { border-color: var(--accent-border-h); }
+.btn-primary {
+  background: var(--accent); color: var(--text-on-accent);
+  font-family: var(--font-sans); font-size: 15px; font-weight: 600;
+  border: none; border-radius: var(--radius-sm); cursor: pointer;
+  padding: 13px; width: 100%;
+  transition: background 150ms, transform 120ms;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary:hover { background: #fff; color: var(--bg-deep); }
+.btn-primary:active { transform: scale(0.98); background: var(--accent-pressed); }
+#early-form .btn-primary { margin: 6px 0 0; }
+#cta-form .btn-primary { margin: 6px 0 0; gap: 8px; padding: 13px; }
+.form-note {
+  font-size: 12px; color: var(--text-muted); text-align: center;
+  font-family: var(--font-mono);
+}
+
+/* ── REPORT PREVIEW ───────────────────────────────────────────── */
+.report-section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.report-section > .container { padding-top: 0; }
+.section-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--text-muted); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::before { content: '—'; }
+.report-section h2 {
+  font-size: 36px; font-weight: 600; letter-spacing: -0.02em;
+  margin-bottom: 48px;
+}
+.report-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.report-card-header {
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-default);
+  padding: 14px 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.report-card-header-title {
+  font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.report-dot { width: 8px; height: 8px; border-radius: 1px; background: var(--accent);
+  box-shadow: 0 0 8px var(--accent); flex-shrink: 0; }
+.report-card-body { padding: 0 28px 28px; }
+
+/* Score summary row */
+.report-summary {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 28px 0 24px; border-bottom: 1px solid var(--border-default);
+  margin-bottom: 0;
+}
+.summary-score {
+  font-family: var(--font-mono); font-size: 48px; font-weight: 700;
+  color: var(--accent); line-height: 1;
+}
+.summary-denom {
+  font-family: var(--font-mono); font-size: 18px; color: var(--text-muted);
+}
+.summary-label {
+  font-size: 14px; color: var(--text-secondary); margin-left: 8px;
+}
+
+/* Unified diagnostic table */
+.diag-table { width: 100%; border-collapse: collapse; }
+.diag-table th {
+  text-align: left; font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-muted); padding: 14px 0 10px; border-bottom: 1px solid var(--border-default);
+}
+.diag-table th:not(:first-child) { padding-left: 16px; }
+.diag-table td {
+  padding: 14px 0; border-bottom: 1px solid var(--border-default);
+  vertical-align: middle;
+}
+.diag-table td:not(:first-child) { padding-left: 16px; }
+.diag-table tr:last-child td { border-bottom: none; }
+.diag-cat { font-size: 14px; font-weight: 500; color: var(--text-primary); white-space: nowrap; width: 180px; }
+.diag-bar-cell { width: 200px; }
+.diag-bar {
+  height: 4px; background: var(--bg-elevated); border-radius: 2px; overflow: hidden;
+}
+.diag-bar-fill { height: 100%; border-radius: 2px; }
+.diag-bar-fill.strong  { background: var(--accent); }
+.diag-bar-fill.medium  { background: var(--status-warning); }
+.diag-bar-fill.weak    { background: var(--status-danger); }
+.result-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: var(--radius-xs);
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+}
+.chip-strong { background: rgba(77,255,196,0.12); color: var(--accent); }
+.chip-medium { background: rgba(255,190,77,0.12); color: var(--status-warning); }
+.chip-weak   { background: rgba(255,107,107,0.12); color: var(--status-danger); }
+.diag-finding { font-size: 13px; color: var(--text-secondary); }
+.insight-box {
+  background: var(--bg-deep); border: 1px solid var(--border-default);
+  border-radius: var(--radius-md); padding: 16px; margin-top: 24px;
+}
+.insight-label {
+  font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px;
+}
+.insight-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── PROBLEM / SOLUTION ───────────────────────────────────────── */
+.problem-section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.two-col {
+  display: grid; grid-template-columns: 1fr 1px 1fr; gap: 64px; align-items: start;
+}
+.two-col-divider { background: var(--border-default); align-self: stretch; }
+.problem-col h2, .solution-col h2 {
+  font-size: 28px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 16px; line-height: 1.2;
+}
+.solution-col h2 { color: var(--text-primary); }
+.col-body { color: var(--text-secondary); font-size: 15px; line-height: 1.65; }
+.col-body p { margin-bottom: 12px; }
+.col-body strong { color: var(--text-primary); font-weight: 600; }
+.symptom-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+.symptom-list li, .feature-list li {
+  list-style: none;
+  font-size: 14px; color: var(--text-secondary);
+  line-height: 1.5;
+  padding-left: 16px;
+  background-repeat: no-repeat;
+  background-position: 0 7px;
+  background-size: 6px 6px;
+}
+.symptom-list li {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Crect width='6' height='6' rx='1' fill='%23FF6B6B'/%3E%3C/svg%3E");
+}
+.feature-list li {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Crect width='6' height='6' rx='1' fill='%234DFFC4'/%3E%3C/svg%3E");
+}
+.feature-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+
+.problem-kicker {
+  margin-top: 32px;
+  font-size: 20px; font-weight: 600; line-height: 1.4;
+  color: var(--text-primary); letter-spacing: -0.01em;
+  border-top: 1px solid var(--border-default); padding-top: 24px;
+  border-left: 2px solid var(--status-danger); padding-left: 20px;
+}
+
+/* ── HOW IT WORKS ─────────────────────────────────────────────── */
+.how-section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.how-section h2 {
+  font-size: 36px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 56px;
+}
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.step-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 32px 28px;
+  position: relative;
+  transition: border-color 200ms;
+}
+.step-card:hover { border-color: var(--accent-border-h); }
+.step-num {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--accent); letter-spacing: 0.1em; margin-bottom: 16px;
+}
+.step-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+.step-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── WHAT YOU GET ─────────────────────────────────────────────── */
+.features-section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.features-section h2 {
+  font-size: 36px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.features-section > .container > p {
+  font-size: 16px; color: var(--text-secondary); margin-bottom: 48px;
+}
+.features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+.feature-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  transition: border-color 200ms;
+}
+.feature-card:hover { border-color: var(--accent-border-h); }
+.feature-icon {
+  width: 36px; height: 36px; background: var(--accent-subtle);
+  border: 1px solid var(--accent-border); border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent); margin-bottom: 16px;
+}
+.feature-card h3 { font-size: 22px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
+.feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── WHO IT'S FOR ─────────────────────────────────────────────── */
+.audience-section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.audience-section h2 {
+  font-size: 36px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 48px;
+}
+.audience-rows { display: flex; flex-direction: column; }
+.audience-row {
+  display: grid; grid-template-columns: 260px 1fr;
+  align-items: center; gap: 40px;
+  padding: 28px 0;
+  border-top: 1px solid var(--border-default);
+  transition: background 200ms;
+  cursor: default;
+}
+.audience-row:last-child { border-bottom: 1px solid var(--border-default); }
+.audience-row:hover .audience-role-name { color: var(--accent); }
+.audience-row:hover .audience-role-num { color: var(--accent); opacity: 0.6; }
+.audience-role {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.audience-role-name {
+  font-size: 22px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.01em;
+  transition: color 200ms;
+}
+.audience-role-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  transition: color 200ms;
+}
+.audience-desc {
+  font-size: 15px; color: var(--text-secondary); line-height: 1.6;
+}
+.audience-arrow { display: none; }
+
+/* ── EARLY ACCESS ─────────────────────────────────────────────── */
+.early-section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border-default);
+  background: var(--bg-surface);
+}
+.early-inner {
+  display: grid; grid-template-columns: 1fr 400px; gap: 80px; align-items: center;
+}
+.early-section h2 {
+  font-size: 36px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.early-section p { font-size: 16px; color: var(--text-secondary); margin-bottom: 12px; }
+
+/* ── FUTURE VISION ────────────────────────────────────────────── */
+.vision-section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.vision-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.vision-section h2 {
+  font-size: 36px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.vision-section > .container > .vision-inner > .vision-left > p {
+  font-size: 16px; color: var(--text-secondary); margin-bottom: 12px;
+}
+.vision-goal {
+  margin-top: 32px;
+  font-size: 20px; font-weight: 600; line-height: 1.4;
+  color: var(--text-primary); letter-spacing: -0.01em;
+  border-top: 1px solid var(--border-default); padding-top: 24px;
+  border-left: 2px solid var(--accent); padding-left: 20px;
+}
+.roadmap-list { display: flex; flex-direction: column; gap: 2px; }
+.roadmap-item {
+  background: var(--bg-surface); border: 1px solid var(--border-default);
+  border-radius: var(--radius-md); padding: 20px 24px;
+  display: flex; align-items: center; gap: 16px;
+  transition: border-color 200ms;
+}
+.roadmap-item:hover { border-color: var(--accent-border-h); }
+.roadmap-icon {
+  color: var(--accent); flex-shrink: 0;
+  width: 20px; height: 20px;
+}
+.roadmap-text { font-size: 14px; color: var(--text-secondary); }
+.roadmap-text strong { color: var(--text-primary); font-weight: 600; display: block; margin-bottom: 2px; }
+
+/* ── FINAL CTA ────────────────────────────────────────────────── */
+.cta-section {
+  padding: 100px 0;
+  text-align: center;
+}
+.cta-section h2 {
+  font-size: clamp(32px, 4vw, 48px); font-weight: 700;
+  letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.cta-section h2 em { color: var(--text-accent); font-style: normal; }
+.cta-section > .container > p {
+  font-size: 18px; color: var(--text-secondary); margin-bottom: 48px; max-width: 560px; margin-left: auto; margin-right: auto;
+}
+.cta-form {
+  display: flex; flex-direction: column; gap: 12px;
+  max-width: 400px; margin: 0 auto;
+}
+
+/* ── FOOTER ───────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border-default);
+  padding: 32px 0;
+}
+.footer-inner {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo img { height: 28px; opacity: 0.7; }
+.footer-text {
+  font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);
+}
+
+/* ── SUCCESS STATE ────────────────────────────────────────────── */
+.success-state {
+  display: none; text-align: center; padding: 32px 0;
+}
+.success-state.active { display: block; }
+.success-icon {
+  font-family: var(--font-mono); font-size: 40px; color: var(--accent);
+  margin-bottom: 12px;
+}
+.success-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.success-sub { font-size: 14px; color: var(--text-secondary); }
+
+/* ── TWEAKS PANEL ─────────────────────────────────────────────── */
+#tweaks-panel {
+  display: none;
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-lg);
+  padding: 20px; width: 240px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+#tweaks-panel.visible { display: block; }
+.tweaks-title {
+  font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 16px;
+}
+.tweak-row { margin-bottom: 14px; }
+.tweak-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+.tweak-options { display: flex; gap: 6px; flex-wrap: wrap; }
+.tweak-chip {
+  font-size: 12px; padding: 3px 10px; border-radius: var(--radius-xs);
+  border: 1px solid var(--border-default); background: var(--bg-deep);
+  color: var(--text-secondary); cursor: pointer; transition: all 120ms;
+}
+.tweak-chip.active {
+  border-color: var(--accent-border-h); background: var(--accent-subtle); color: var(--accent);
+}
+.tweak-score-input {
+  width: 100%; background: var(--bg-deep); border: 1px solid var(--border-default);
+  border-radius: var(--radius-xs); color: var(--text-primary); font-family: var(--font-mono);
+  font-size: 14px; padding: 6px 10px; outline: none;
+  transition: border-color 150ms;
+}
+.tweak-score-input:focus { border-color: var(--accent-border-h); }
+
+/* ── RESPONSIVE ───────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  .two-col { grid-template-columns: 1fr; gap: 40px; }
+  .two-col-divider { display: none; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .audience-grid { grid-template-columns: 1fr; }
+  .early-inner { grid-template-columns: 1fr; gap: 48px; }
+  .vision-inner { grid-template-columns: 1fr; gap: 40px; }
+  .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+  .container { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo"><img src="assets/logo_main.png" alt="Xraylo"></a>
+      <span class="nav-badge"><span class="dot-md"></span>Early access</span>
+      <div class="nav-spacer"></div>
+      <a href="#how" class="nav-link">How it works</a>
+      <a href="#cta" class="btn-nav">Scan my brand</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">Brand diagnostics</div>
+        <h1>Scan your brand<br>like an <em>X-ray</em></h1>
+        <p class="hero-sub">AI-powered diagnostics that reveal hidden weaknesses in positioning, messaging, and brand structure.</p>
+        <p class="hero-note">Understand how clearly your brand communicates — and where it breaks.</p>
+      </div>
+      <div>
+        <div class="scan-card">
+          <div class="scan-card-label"><span class="dot-md"></span>Start your scan</div>
+          <div class="scan-form" id="hero-form-wrap">
+            <form id="hero-form" action="https://formspree.io/f/mojrbpdz" method="POST">
+              <input type="hidden" name="_subject" value="New Xraylo scan request (hero)">
+              <input type="hidden" name="source" value="hero">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <input class="form-input" type="url" placeholder="Website URL" required id="hero-url" name="website">
+                <input class="form-input" type="email" placeholder="Email address" required id="hero-email" name="email">
+                <button class="btn-primary" type="submit">
+                  <span>Scan my brand</span>
+                  <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+                </button>
+                <p class="form-note">Free early access brand scan.</p>
+              </div>
+            </form>
+            <div class="success-state" id="hero-success">
+              <div class="success-icon">✓</div>
+              <div class="success-title">Scan initiated.</div>
+              <div class="success-sub">Your diagnostic report will be sent to your email within 24 hours.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REPORT PREVIEW -->
+<section class="report-section">
+  <div class="container">
+    <div class="section-label">Sample output</div>
+    <h2>See what your brand scan looks like</h2>
+    <div class="report-card">
+      <div class="report-card-header">
+        <div class="report-dot"></div>
+        <div class="report-card-header-title">Brand diagnostic report — Example Corp</div>
+        <div style="flex:1;"></div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">Scan complete</div>
+      </div>
+      <div class="report-card-body">
+        <div class="report-summary">
+          <span class="summary-score" id="score-display">72</span>
+          <span class="summary-denom">/ 100</span>
+          <span class="summary-label">Overall brand score</span>
+        </div>
+        <table class="diag-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Score</th>
+              <th>Result</th>
+              <th>Finding</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="diag-cat">Positioning clarity</td>
+              <td class="diag-bar-cell"><div class="diag-bar"><div class="diag-bar-fill medium" style="width:55%"></div></div></td>
+              <td><span class="result-chip chip-medium">Medium</span></td>
+              <td class="diag-finding">Target audience definition is broad</td>
+            </tr>
+            <tr>
+              <td class="diag-cat">Messaging consistency</td>
+              <td class="diag-bar-cell"><div class="diag-bar"><div class="diag-bar-fill weak" style="width:30%"></div></div></td>
+              <td><span class="result-chip chip-weak">Weak</span></td>
+              <td class="diag-finding">Tagline conflicts with homepage copy</td>
+            </tr>
+            <tr>
+              <td class="diag-cat">Differentiation</td>
+              <td class="diag-bar-cell"><div class="diag-bar"><div class="diag-bar-fill medium" style="width:58%"></div></div></td>
+              <td><span class="result-chip chip-medium">Medium</span></td>
+              <td class="diag-finding">Feature-led rather than position-led</td>
+            </tr>
+            <tr>
+              <td class="diag-cat">Value proposition</td>
+              <td class="diag-bar-cell"><div class="diag-bar"><div class="diag-bar-fill strong" style="width:85%"></div></div></td>
+              <td><span class="result-chip chip-strong">Strong</span></td>
+              <td class="diag-finding">Clear problem/solution articulation</td>
+            </tr>
+            <tr>
+              <td class="diag-cat">Visual system</td>
+              <td class="diag-bar-cell"><div class="diag-bar"><div class="diag-bar-fill strong" style="width:88%"></div></div></td>
+              <td><span class="result-chip chip-strong">Strong</span></td>
+              <td class="diag-finding">Consistent identity across surfaces</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="insight-box">
+          <div class="insight-label">Key insight</div>
+          <div class="insight-text">The brand communicates features clearly, but positioning lacks differentiation from competitors. Messaging focuses on capabilities rather than a clear strategic narrative.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM / SOLUTION -->
+<section class="problem-section">
+  <div class="container">
+    <div class="two-col">
+      <div class="problem-col">
+        <div class="section-label">The problem</div>
+        <h2>Most brand problems are <strong>structural</strong>, not visual</h2>
+        <div class="col-body">
+          <p>They are hard to detect in internal reviews and design discussions.</p>
+          <p>Common symptoms:</p>
+          <ul class="symptom-list">
+            <li>People don't clearly understand what your product does</li>
+            <li>Messaging changes across pages</li>
+            <li>Positioning becomes vague over time</li>
+            <li>Teams focus on design instead of clarity</li>
+          </ul>
+          <p>By the time these issues become obvious, they already affect growth.</p>
+          <p class="problem-kicker">You can't fix what you can't see</p>
+        </div>
+      </div>
+      <div class="two-col-divider"></div>
+      <div class="solution-col">
+        <div class="section-label">The solution</div>
+        <h2>Xraylo reveals your brand structure</h2>
+        <div class="col-body">
+          <p>Xraylo analyzes your brand like a diagnostic system. Instead of subjective opinions, it evaluates structural elements:</p>
+          <ul class="feature-list">
+            <li>Positioning clarity</li>
+            <li>Messaging consistency</li>
+            <li>Value proposition strength</li>
+            <li>Brand differentiation</li>
+            <li>Communication structure</li>
+          </ul>
+          <p>The result is a clear report showing where your brand works — and where it needs improvement.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="section-label">Process</div>
+    <h2>How it works</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01 — Submit</div>
+        <h3>Submit your website</h3>
+        <p>Enter your website URL and email address. No account setup required.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02 — Scan</div>
+        <h3>AI scans your brand</h3>
+        <p>Xraylo evaluates positioning, messaging, and structure across your brand surfaces.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03 — Report</div>
+        <h3>Receive your report</h3>
+        <p>Get a clear diagnostic with specific findings, scores, and actionable recommendations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="features-section">
+  <div class="container">
+    <div class="section-label">Deliverable</div>
+    <h2>What your scan includes</h2>
+    <p>Your brand scan report is a structured diagnostic — not a subjective opinion.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="activity" style="width:18px;height:18px;"></i></div>
+        <h3>Brand Score</h3>
+        <p>A structured evaluation of brand clarity and strength, expressed as a composite score across five dimensions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="target" style="width:18px;height:18px;"></i></div>
+        <h3>Positioning Analysis</h3>
+        <p>How clearly your product communicates its value to the right audience — and where the signal breaks down.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="repeat" style="width:18px;height:18px;"></i></div>
+        <h3>Messaging Consistency</h3>
+        <p>Whether your message stays coherent across pages, channels, and touchpoints — or drifts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="git-branch" style="width:18px;height:18px;"></i></div>
+        <h3>Differentiation Report</h3>
+        <p>How clearly your brand stands out from competitors — and what makes your positioning distinctive.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="alert-triangle" style="width:18px;height:18px;"></i></div>
+        <h3>Structural Issues</h3>
+        <p>Hidden weaknesses in brand architecture that undermine clarity without being obviously visible.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="file-text" style="width:18px;height:18px;"></i></div>
+        <h3>Actionable Recommendations</h3>
+        <p>Specific, prioritized recommendations for improving each area identified in the diagnostic.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="audience-section">
+  <div class="container">
+    <div class="section-label">Audience</div>
+    <h2>Who it's for</h2>
+    <div class="audience-rows">
+      <div class="audience-row">
+        <div class="audience-role">
+          <div class="audience-role-name">Founders</div>
+          <div class="audience-role-num">01</div>
+        </div>
+        <div class="audience-desc">Understand whether your brand clearly communicates what your product does — before investing in marketing.</div>
+        <div class="audience-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+      </div>
+      <div class="audience-row">
+        <div class="audience-role">
+          <div class="audience-role-name">Marketing teams</div>
+          <div class="audience-role-num">02</div>
+        </div>
+        <div class="audience-desc">Identify structural gaps in positioning and messaging that reduce campaign effectiveness.</div>
+        <div class="audience-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+      </div>
+      <div class="audience-row">
+        <div class="audience-role">
+          <div class="audience-role-name">Designers</div>
+          <div class="audience-role-num">03</div>
+        </div>
+        <div class="audience-desc">Evaluate brand structure beyond visual execution — understand whether the strategy supports the identity.</div>
+        <div class="audience-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+      </div>
+      <div class="audience-row">
+        <div class="audience-role">
+          <div class="audience-role-name">Startup teams</div>
+          <div class="audience-role-num">04</div>
+        </div>
+        <div class="audience-desc">Improve brand clarity before scaling marketing and sales. Fix structural issues when they're cheapest to fix.</div>
+        <div class="audience-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY ACCESS -->
+<section class="early-section">
+  <div class="container">
+    <div class="early-inner">
+      <div>
+        <div class="section-label">Limited availability</div>
+        <h2>Early access</h2>
+        <p>Xraylo is currently offering free brand scans to a limited number of startups.</p>
+        <p>Submit your website to receive a full diagnostic report — and help shape the product.</p>
+        <p style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-top:16px;">Brand scan completed within 24 hours.</p>
+      </div>
+      <div class="scan-card">
+        <div class="scan-card-label"><span class="dot-md"></span>Request your scan</div>
+        <div class="scan-form">
+          <form id="early-form" action="https://formspree.io/f/mojrbpdz" method="POST">
+            <input type="hidden" name="_subject" value="New Xraylo scan request (early access)">
+            <input type="hidden" name="source" value="early-access">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <input class="form-input" type="url" placeholder="Website URL" required name="website">
+              <input class="form-input" type="email" placeholder="Email address" required name="email">
+              <button class="btn-primary" type="submit">
+                <span>Request early access</span>
+                <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+              </button>
+            </div>
+          </form>
+          <div class="success-state" id="early-success">
+            <div class="success-icon">✓</div>
+            <div class="success-title">Request received.</div>
+            <div class="success-sub">You'll receive your diagnostic report within 24 hours.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE VISION -->
+<section class="vision-section">
+  <div class="container">
+    <div class="vision-inner">
+      <div class="vision-left">
+        <div class="section-label">Roadmap</div>
+        <h2>Future vision</h2>
+        <p style="font-size:16px;color:var(--text-secondary);margin-bottom:12px;">Xraylo is evolving into a brand intelligence platform.</p>
+        <p style="font-size:16px;color:var(--text-secondary);">The goal is to make brand clarity measurable — across time, competitors, and channels.</p>
+        <div class="vision-goal">The goal is to make brand clarity measurable</div>
+      </div>
+      <div>
+        <div class="roadmap-list">
+          <div class="roadmap-item">
+            <div class="roadmap-icon"><i data-lucide="zap" style="width:20px;height:20px;color:var(--accent)"></i></div>
+            <div class="roadmap-text">
+              <strong>Automated brand diagnostics</strong>
+              Continuous monitoring of brand clarity signals
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-icon"><i data-lucide="bar-chart-2" style="width:20px;height:20px;color:var(--accent)"></i></div>
+            <div class="roadmap-text">
+              <strong>Competitor brand analysis</strong>
+              Compare positioning against direct competitors
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-icon"><i data-lucide="clock" style="width:20px;height:20px;color:var(--accent)"></i></div>
+            <div class="roadmap-text">
+              <strong>Brand monitoring over time</strong>
+              Track how your brand evolves quarter by quarter
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-icon"><i data-lucide="file-check" style="width:20px;height:20px;color:var(--accent)"></i></div>
+            <div class="roadmap-text">
+              <strong>Investor-ready brand reports</strong>
+              Structured brand health reports for fundraising
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="section-label" style="justify-content:center;">Get started</div>
+    <h2>See your brand structure <em>clearly</em></h2>
+    <p>Scan your brand and discover hidden weaknesses in positioning, messaging, and communication.</p>
+    <div class="cta-form">
+      <form id="cta-form" action="https://formspree.io/f/mojrbpdz" method="POST">
+        <input type="hidden" name="_subject" value="New Xraylo scan request (final CTA)">
+        <input type="hidden" name="source" value="final-cta">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <input class="form-input" type="url" placeholder="Website URL" required name="website">
+          <input class="form-input" type="email" placeholder="Email address" required name="email">
+          <button class="btn-primary" type="submit">
+            <span>Scan my brand</span>
+            <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+          </button>
+          <p class="form-note">Free early access brand scan.</p>
+        </div>
+      </form>
+      <div class="success-state" id="cta-success">
+        <div class="success-icon">✓</div>
+        <div class="success-title">Scan initiated.</div>
+        <div class="success-sub">Your diagnostic report will be sent to your email within 24 hours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><img src="assets/logo_main.png" alt="Xraylo"></div>
+      <div class="footer-text">Brand diagnostics. Early access 2026.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- TWEAKS PANEL -->
+<div id="tweaks-panel">
+  <div class="tweaks-title">Tweaks</div>
+  <div class="tweak-row">
+    <span class="tweak-label">Accent color</span>
+    <div class="tweak-options">
+      <span class="tweak-chip active" data-tweak="accent" data-value="#4DFFC4">Mint</span>
+      <span class="tweak-chip" data-tweak="accent" data-value="#7DD8FF">Blue</span>
+      <span class="tweak-chip" data-tweak="accent" data-value="#FFBE4D">Amber</span>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <span class="tweak-label">Sample score</span>
+    <input class="tweak-score-input" type="number" min="0" max="100" value="72" id="tweak-score">
+  </div>
+  <div class="tweak-row">
+    <span class="tweak-label">Layout density</span>
+    <div class="tweak-options">
+      <span class="tweak-chip active" data-tweak="density" data-value="normal">Normal</span>
+      <span class="tweak-chip" data-tweak="density" data-value="compact">Compact</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Init Lucide icons
+lucide.createIcons();
+
+// Form handlers — submit to Formspree via AJAX, show success state on completion
+function handleForm(formId, successId) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span>Sending…</span>'; }
+    try {
+      const data = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        form.style.display = 'none';
+        document.getElementById(successId).classList.add('active');
+      } else {
+        const result = await response.json().catch(() => ({}));
+        const msg = (result.errors && result.errors.map(er => er.message).join(', ')) || 'Something went wrong. Please try again.';
+        alert(msg);
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnText; }
+      }
+    } catch (err) {
+      alert('Network error. Please check your connection and try again.');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnText; }
+    }
+  });
+}
+handleForm('hero-form', 'hero-success');
+handleForm('early-form', 'early-success');
+handleForm('cta-form', 'cta-success');
+
+// Tweaks system
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === '__activate_edit_mode') {
+    document.getElementById('tweaks-panel').classList.add('visible');
+  }
+  if (e.data && e.data.type === '__deactivate_edit_mode') {
+    document.getElementById('tweaks-panel').classList.remove('visible');
+  }
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+// Accent tweak
+document.querySelectorAll('[data-tweak="accent"]').forEach(chip => {
+  chip.addEventListener('click', function() {
+    const color = this.dataset.value;
+    document.querySelectorAll('[data-tweak="accent"]').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+    // Convert to dark version for text-on-accent
+    document.documentElement.style.setProperty('--accent', color);
+    document.documentElement.style.setProperty('--text-accent', color);
+    document.documentElement.style.setProperty('--accent-hover', color);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { accentColor: color } }, '*');
+  });
+});
+
+// Score tweak
+document.getElementById('tweak-score').addEventListener('input', function() {
+  const val = Math.min(100, Math.max(0, parseInt(this.value) || 0));
+  document.getElementById('score-display').textContent = val;
+});
+
+// Density tweak
+document.querySelectorAll('[data-tweak="density"]').forEach(chip => {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('[data-tweak="density"]').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+    const compact = this.dataset.value === 'compact';
+    document.querySelectorAll('.hero, .report-section, .problem-section, .how-section, .features-section, .audience-section, .early-section, .vision-section, .cta-section').forEach(s => {
+      s.style.paddingTop = compact ? '48px' : '';
+      s.style.paddingBottom = compact ? '48px' : '';
+    });
+  });
+});
+
+// Animate score bar on scroll
+const scoreBar = document.getElementById('score-bar');
+if (scoreBar) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        scoreBar.style.width = '72%';
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  scoreBar.style.width = '0%';
+  observer.observe(scoreBar);
+}
+</script>
+
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="80" fill="#1B3331"/>
+  <rect x="16" y="20" width="88" height="40" rx="4" fill="#233F3C" stroke="rgba(77,255,196,0.25)" stroke-width="1"/>
+  <rect x="24" y="32" width="30" height="3" rx="1.5" fill="#4DFFC4" opacity="0.8"/>
+  <rect x="24" y="40" width="50" height="2" rx="1" fill="#8AADA8" opacity="0.5"/>
+  <rect x="24" y="46" width="38" height="2" rx="1" fill="#8AADA8" opacity="0.3"/>
+  <text x="60" y="16" font-family="monospace" font-size="6" fill="#4DFFC4" text-anchor="middle" opacity="0.7">Xraylo</text>
+</svg>
+</template>
+</body>
+</html>

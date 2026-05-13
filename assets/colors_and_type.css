@@ -1,0 +1,273 @@
+/* ============================================================
+   XRAYLO DESIGN SYSTEM — colors_and_type.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+/* ============================================================
+   COLOR TOKENS
+   ============================================================ */
+:root {
+  /* --- Base Palette --- */
+  --xr-green-950:  #0D201E;
+  --xr-green-900:  #152928;
+  --xr-green-800:  #1B3331;
+  --xr-green-700:  #233F3C;
+  --xr-green-600:  #2C5250;
+  --xr-green-500:  #3A6E6A;
+  --xr-green-400:  #4A8A85;
+  --xr-green-300:  #8AADA8;
+  --xr-green-200:  #B8CFCC;
+  --xr-green-100:  #E0EDEC;
+
+  --xr-mint-500:   #4DFFC4;
+  --xr-mint-400:   #7DFFDA;
+  --xr-mint-600:   #2EAF8A;
+  --xr-mint-700:   #1B7A62;
+  --xr-mint-100:   #D6FFF4;
+
+  /* --- Semantic Background --- */
+  --bg-base:       var(--xr-green-800);   /* #1B3331 — page background */
+  --bg-deep:       var(--xr-green-900);   /* #152928 — overlays, code blocks */
+  --bg-surface:    var(--xr-green-700);   /* #233F3C — cards, panels */
+  --bg-elevated:   var(--xr-green-600);   /* #2C5250 — tooltips, dropdowns */
+
+  /* --- Accent --- */
+  --accent:        var(--xr-mint-500);    /* #4DFFC4 — primary CTA, icon */
+  --accent-hover:  var(--xr-mint-400);    /* lighter on hover */
+  --accent-pressed:var(--xr-mint-600);    /* #2EAF8A — pressed state */
+  --accent-subtle: #1B4A41;              /* tinted accent background */
+  --accent-border: rgba(77,255,196,0.18);/* accent-tinted border */
+  --accent-border-hover: rgba(77,255,196,0.40);
+
+  /* --- Text --- */
+  --text-primary:  #FFFFFF;
+  --text-secondary:var(--xr-green-300);   /* #8AADA8 */
+  --text-muted:    var(--xr-green-500);   /* #3A6E6A */
+  --text-accent:   var(--xr-mint-500);    /* #4DFFC4 — accent text */
+  --text-on-accent:#152928;              /* text on mint backgrounds */
+
+  /* --- Borders & Dividers --- */
+  --border-default: rgba(255,255,255,0.08);
+  --border-accent:  var(--accent-border);
+  --border-strong:  rgba(255,255,255,0.16);
+
+  /* --- Status / Severity --- */
+  --status-danger:  #FF6B6B;
+  --status-warning: #FFBE4D;
+  --status-ok:      var(--xr-mint-500);
+  --status-neutral: var(--xr-green-300);
+
+  /* --- Overlay --- */
+  --overlay-sm:    rgba(21,41,40,0.70);
+  --overlay-md:    rgba(21,41,40,0.88);
+
+  /* ============================================================
+     RADIUS
+     ============================================================ */
+  --radius-none: 0px;
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-full:999px;
+
+  /* ============================================================
+     SPACING
+     ============================================================ */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ============================================================
+     TYPOGRAPHY — Families
+     ============================================================ */
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ============================================================
+     TYPOGRAPHY — Scale
+     ============================================================ */
+  --text-display: 700 56px/1.1 var(--font-sans);
+  --text-h1:      600 36px/1.15 var(--font-sans);
+  --text-h2:      600 28px/1.2 var(--font-sans);
+  --text-h3:      600 20px/1.3 var(--font-sans);
+  --text-h4:      600 16px/1.4 var(--font-sans);
+  --text-body-lg: 400 18px/1.6 var(--font-sans);
+  --text-body:    400 16px/1.6 var(--font-sans);
+  --text-body-sm: 400 14px/1.5 var(--font-sans);
+  --text-label:   500 12px/1  var(--font-sans);
+  --text-mono:    500 14px/1.5 var(--font-mono);
+  --text-mono-lg: 500 18px/1.4 var(--font-mono);
+
+  /* ============================================================
+     ELEVATION (border-based, no shadows)
+     ============================================================ */
+  --elevation-0: none;
+  --elevation-1: 0 0 0 1px var(--border-default);
+  --elevation-2: 0 0 0 1px var(--border-accent);
+  --elevation-3: 0 0 0 1px var(--border-strong);
+
+  /* ============================================================
+     TRANSITION
+     ============================================================ */
+  --transition-fast: 120ms ease-out;
+  --transition-base: 200ms ease-out;
+  --transition-slow: 350ms ease-out;
+}
+
+/* ============================================================
+   BASE ELEMENT STYLES
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font: var(--text-body);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+}
+
+/* --- Headings --- */
+h1 { font: var(--text-h1); letter-spacing: -0.02em; }
+h2 { font: var(--text-h2); letter-spacing: -0.01em; }
+h3 { font: var(--text-h3); }
+h4 { font: var(--text-h4); }
+
+/* --- Display --- */
+.display {
+  font: var(--text-display);
+  letter-spacing: -0.03em;
+}
+
+/* --- Body --- */
+p      { font: var(--text-body); color: var(--text-secondary); }
+p.lead { font: var(--text-body-lg); }
+small  { font: var(--text-body-sm); color: var(--text-muted); }
+
+/* --- Labels --- */
+.label {
+  font: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* --- Code / Mono --- */
+code, pre, .mono {
+  font: var(--text-mono);
+  background: var(--bg-deep);
+  color: var(--accent);
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+}
+pre, .mono-block {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+}
+
+/* --- Accent Text --- */
+.text-accent  { color: var(--text-accent); }
+.text-muted   { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+
+/* --- Accent Text Highlight --- */
+mark {
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-radius: var(--radius-xs);
+  padding: 0 4px;
+}
+
+/* ============================================================
+   SEMANTIC COMPONENT DEFAULTS
+   ============================================================ */
+
+/* Button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 10px var(--space-5);
+  border-radius: var(--radius-sm);
+  font: var(--text-h4);
+  cursor: pointer;
+  border: none;
+  transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.btn-primary:hover { background: #fff; color: var(--bg-deep); }
+.btn-primary:active { background: var(--accent-pressed); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+.btn-secondary:hover { border-color: var(--accent-border-hover); color: var(--accent); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.btn-ghost:hover { color: var(--text-primary); background: var(--bg-surface); }
+
+/* Card */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  transition: border-color var(--transition-base);
+}
+.card:hover { border-color: var(--accent-border-hover); }
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  font: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.badge-ok      { background: var(--accent-subtle); color: var(--accent); }
+.badge-warning { background: rgba(255,190,77,0.12); color: var(--status-warning); }
+.badge-danger  { background: rgba(255,107,107,0.12); color: var(--status-danger); }
+.badge-neutral { background: var(--bg-elevated); color: var(--text-secondary); }
+
+/* Input */
+.input {
+  display: block;
+  width: 100%;
+  padding: 10px var(--space-4);
+  background: var(--bg-deep);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font: var(--text-body);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+.input::placeholder { color: var(--text-muted); }
+.input:focus { border-color: var(--accent-border-hover); }

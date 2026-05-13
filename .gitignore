@@ -1,0 +1,15 @@
+# OS files
+desktop.ini
+.DS_Store
+Thumbs.db
+
+# Working folders (not needed in production)
+screenshots/
+uploads/
+
+# Editor folders
+.vscode/
+.idea/
+
+# Logs
+*.log
